@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AppRouter from './Router';
 import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -7,6 +7,9 @@ function App() {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userObj, setUserObj] = useState(null);
+  const [, updateState] = useState();
+  const forceUpdate = useCallback(() => updateState({}), []);
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -20,10 +23,19 @@ function App() {
     });
   }, []);
 
+  const refreshUser = () => {
+    setUserObj(auth.currentUser);
+    forceUpdate();
+  };
+
   return (
     <>
       {init ? (
-        <AppRouter isLoggedIn={isLoggedIn} userObj={userObj} />
+        <AppRouter
+          refreshUser={refreshUser}
+          isLoggedIn={Boolean(isLoggedIn)}
+          userObj={userObj}
+        />
       ) : ('initializing...')}
     </>
   );
