@@ -2,7 +2,7 @@ import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { firestore, storage } from '../firebase';
 import { v4 as uuidv4 } from 'uuid';
 import { addDoc, collection } from 'firebase/firestore';
-import { useState } from '@types/react';
+import { useState } from 'react';
 
 const NweetFactory = ({ userObj }) => {
   const [nweet, setNweet] = useState('');
